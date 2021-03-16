@@ -1,10 +1,29 @@
 import { Component } from '@angular/core';
+import { IMDBResponse } from './ombdresponse';
+import { OmdbApiService } from './services/omdb-api.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [OmdbApiService]
 })
 export class AppComponent {
-  title = 'MovieFinder';
+  movieData:IMDBResponse;
+  errorMessage:any;
+
+  constructor(private _omdbService:OmdbApiService) {
+  }
+
+  getMovieDetails(movieName:string) : boolean {
+    this._omdbService.getMovieDate(movieName).subscribe(
+      movieData => {
+        this.movieData=movieData;
+        console.log('Director name: ' + this.movieData.Director);
+      },
+      error => this.errorMessage = <any>error
+    );
+    return false;
+  }
+
 }
